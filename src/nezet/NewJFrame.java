@@ -9,11 +9,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import modell.Konfiguracio;
 
 public class NewJFrame extends javax.swing.JFrame {
 
     public NewJFrame() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -301,16 +303,14 @@ public class NewJFrame extends javax.swing.JFrame {
                 System.out.println(adatok);
                 
                 /* sorok feldolgozása */
-                String[] sorok = adatok.split("\n");
-                String nev = sorok[0].substring(sorok[0].indexOf(" ")+1);
-                String strSzam = sorok[1].substring(sorok[1].indexOf("(")+1, sorok[1].length()-1);
-                int index = Integer.parseInt(strSzam);
-                String strChb = sorok[2].split(" ")[1];
-                boolean chb = strChb.startsWith("nem")?false:true;
-                
-                txtNev.setText(nev);
-                cmbSzak.setSelectedIndex(index);
-                chbHirlevel.setSelected(chb);
+                String[] sor = adatok.split(" ");
+                int sorIndex = Integer.parseInt(sor[1]);
+                boolean chb = Boolean.parseBoolean(sor[2]);
+                Konfiguracio modell = new Konfiguracio(sor[0], sorIndex, chb);
+
+                txtNev.setText(modell.getNev());
+                cmbSzak.setSelectedIndex(modell.getSzakIndex());
+                chbHirlevel1.setSelected(modell.isHirlevel());
             } catch (IOException ex) {
                 Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -336,6 +336,7 @@ public class NewJFrame extends javax.swing.JFrame {
         String msg = nev+SEP+cmbSzak1.getSelectedIndex()+SEP+hirlevel;
         return msg;
     }
+    
     private void kilepes() throws HeadlessException {
         String msg = "Biztos kilépsz?";
         String cim = "KILÉPÉS";
