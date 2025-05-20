@@ -12,7 +12,9 @@ import javax.swing.JOptionPane;
 import modell.Konfiguracio;
 
 public class NewJFrame extends javax.swing.JFrame {
-
+    
+    private Konfiguracio modell;
+    
     public NewJFrame() {
         initComponents();
         setLocationRelativeTo(null);
@@ -50,7 +52,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mnuPrgKilepes = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        menuPrgBeszedes = new javax.swing.JMenuItem();
 
         jLabel4.setText("Név");
 
@@ -200,8 +202,13 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jMenu2.setText("Konfiguráció");
 
-        jMenuItem1.setText("jMenuItem1");
-        jMenu2.add(jMenuItem1);
+        menuPrgBeszedes.setText("Modell beszédes kimenete");
+        menuPrgBeszedes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuPrgBeszedesActionPerformed(evt);
+            }
+        });
+        jMenu2.add(menuPrgBeszedes);
 
         jMenuBar1.add(jMenu2);
 
@@ -306,11 +313,11 @@ public class NewJFrame extends javax.swing.JFrame {
                 String[] sor = adatok.split(" ");
                 int sorIndex = Integer.parseInt(sor[1]);
                 boolean chb = Boolean.parseBoolean(sor[2]);
-                Konfiguracio modell = new Konfiguracio(sor[0], sorIndex, chb);
+                Konfiguracio k1 = new Konfiguracio(sor[0], sorIndex, chb);
 
-                txtNev.setText(modell.getNev());
-                cmbSzak.setSelectedIndex(modell.getSzakIndex());
-                chbHirlevel1.setSelected(modell.isHirlevel());
+                txtNev.setText(k1.getNev());
+                cmbSzak.setSelectedIndex(k1.getSzakIndex());
+                chbHirlevel1.setSelected(k1.isHirlevel());
             } catch (IOException ex) {
                 Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -326,6 +333,17 @@ public class NewJFrame extends javax.swing.JFrame {
     private void txtNev2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNev2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNev2ActionPerformed
+
+    private void menuPrgBeszedesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPrgBeszedesActionPerformed
+        String msg = "Név" + modell.getNev()
+                +"\nSzak: " .formatted("???", modell.getSzakIndex())
+                +"\nHírlevél: " + modell.isHirlevel();
+        try {
+            Files.writeString(Path.of("modellbeszedes.txt"), msg);
+        } catch (IOException ex) {
+            Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_menuPrgBeszedesActionPerformed
 
     private String tartalom(){
         String nev = txtNev2.getText();
@@ -401,8 +419,8 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JMenuItem menuPrgBeszedes;
     private javax.swing.JMenuItem mnuPrgBetoltes;
     private javax.swing.JMenuItem mnuPrgKilepes;
     private javax.swing.JMenuItem mnuPrgMentes;
